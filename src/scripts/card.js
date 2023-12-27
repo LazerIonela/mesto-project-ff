@@ -1,10 +1,8 @@
 // функция создания карточки, 
 // функции-обработчики событий удаления и лайка карточки;
-// import { cardTemplate } from './index.js';
-
 
 const cardTemplate = document.querySelector('#card-template').content;
-function createCard(card, removeCard, likeCard) {
+export function createCard(card, removeCard, likeCard) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
 
   cardElement.querySelector('.card__title').textContent = card.name;
@@ -17,16 +15,13 @@ function createCard(card, removeCard, likeCard) {
   likeButton.addEventListener('click', likeCard);
   
   return cardElement;
-}
+};
 
-
-function removeCard(evt) {
+export function removeCard(evt) {
   const card = evt.target.closest('.places__item');
   card.remove();
-}
+};
 
-function likeCard(evt) {
+export function likeCard(evt) {
   evt.target.classList.add('card__like-button_is-active');
-}
-
-export { cardTemplate, createCard, removeCard, likeCard };
+};
