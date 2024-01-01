@@ -1,11 +1,8 @@
 // функция создания карточки, 
 // функции-обработчики событий удаления и лайка карточки;
-import { openModalWindow, closeModalWindow } from './modal.js';
+import { openImage } from './index.js'
 
 const cardTemplate = document.querySelector('#card-template').content;
-const popupOpenImage = document.querySelector('.popup_type_image');
-const popupImage = document.querySelector('.popup__image');
-const popupCaption = document.querySelector('.popup__caption');
 
 export function createCard(card, removeCard, likeCard, openImage) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
@@ -32,11 +29,4 @@ export function removeCard(evt) {
 
 export function likeCard(evt) {
   evt.target.classList.add('card__like-button_is-active');
-};
-
-export function openImage(evt) {
-  openModalWindow(popupOpenImage);
-  popupImage.src = evt.target.src;
-  popupImage.alt = evt.target.alt;
-  popupCaption.textContent = evt.target.alt;
 };
