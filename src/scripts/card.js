@@ -1,7 +1,5 @@
 // функция создания карточки, 
 // функции-обработчики событий удаления и лайка карточки;
-import { openImage } from './index.js'
-
 const cardTemplate = document.querySelector('#card-template').content;
 
 export function createCard(card, removeCard, likeCard, openImage) {

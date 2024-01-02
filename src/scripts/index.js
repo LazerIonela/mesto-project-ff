@@ -32,7 +32,7 @@ const formAddNewPlace = document.forms['new-place'];
 const cardName = document.querySelector('.popup__input_type_card-name');
 const cardLink = document.querySelector('.popup__input_type_url');
 
-export function openImage(evt) {
+function openImage(evt) {
     openModalWindow(popupOpenImage);
     popupImage.src = evt.target.src;
     popupImage.alt = evt.target.alt;
