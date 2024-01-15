@@ -8,6 +8,7 @@ import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openModalWindow, closeModalWindow } from './modal.js';
+import { enableValidation, clearValidation} from './validation.js';
 
 const cardList = document.querySelector('.places__list');
 
@@ -31,6 +32,8 @@ const formAddNewPlace = document.forms['new-place'];
 
 const cardName = document.querySelector('.popup__input_type_card-name');
 const cardLink = document.querySelector('.popup__input_type_url');
+
+
 
 function openImage(evt) {
     openModalWindow(popupOpenImage);
@@ -71,3 +74,7 @@ function handleCreateCard(evt) {
   
 formEditProfile.addEventListener('submit', handleFormSubmit);
 formAddNewPlace.addEventListener('submit', handleCreateCard);
+
+enableValidation(formElement, inputElement, validationConfig);
+
+clearValidation(formElement, validationConfig); 
