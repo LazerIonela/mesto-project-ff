@@ -1,17 +1,3 @@
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible',
-};
-
-const formElement = document.querySelector('.popup__form');
-const inputElement = formElement.querySelectorAll('.popup__input');
-const buttonElement = document.querySelectorAll('.popup__button');
-
-
 function showInputError(formElement, inputElement, errorMessage) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);  
   inputElement.classList.add(validationConfig.inputErrorClass);
@@ -21,16 +7,14 @@ function showInputError(formElement, inputElement, errorMessage) {
 
 function hideInputError(formElement, inputElement) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);  
-  inputElement.classlist.remove(validationConfig.inputErrorClass);
+  inputElement.classList.remove(validationConfig.inputErrorClass);
   errorElement.classList.remove(validationConfig.errorClass);
   errorElement.textContent = '';
 };
 
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
-  // Если поле не валидно, колбэк вернёт true
-  // Обход массива прекратится и вся функция
-  // hasInvalidInput вернёт true
+  // Если поле не валидно, колбэк вернёт true Обход массива прекратится и вся функция hasInvalidInput вернёт true
       return !inputElement.validity.valid;   
   });
 };
@@ -47,7 +31,7 @@ function isValid(formElement, inputElement) {
     } else {
       hideInputError(formElement, inputElement);
     } 
-  };
+};
 
 function toggleButtonState(inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
@@ -61,7 +45,7 @@ function toggleButtonState(inputList, buttonElement) {
 
 function setEventListeners(formElement) {
   const inputList = Array.from(validationConfig.inputSelector);
-  const buttonElement = formElement.querySelectorAll(validationConfig.submitButtonSelector);
+  const buttonElement = formElement.querySelectorы(validationConfig.submitButtonSelector);
 
   toggleButtonState(inputList, buttonElement);
 
@@ -82,7 +66,7 @@ export function enableValidation(validationConfig) {
     });
     setEventListeners(formElement);
     });
-  };
+};
 
 export function clearValidation(formElement, validationConfig) {
   const inputList = Array.from(document.querySelectorAll(validationConfig.inputSelector));
@@ -96,4 +80,3 @@ export function clearValidation(formElement, validationConfig) {
 
   toggleButtonState(inputList, buttonElement);
 };
-
