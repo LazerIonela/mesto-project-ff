@@ -6,77 +6,79 @@ const config = {
     },
   };
 
-function checkRequest(res) {
-    if (res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
-    }
-};  
+  function request(url, options) {
+    return fetch(url, options)
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`)
+      })
+  }
 
-export function getUserInfo() {
-    return fetch(`${config.baseUrl}/users/me`, {
+export function getUserInfoApi() {
+    return request(`${config.baseUrl}/users/me`, {
         method: 'GET',
-        headers: config.headers,
-    }).then(checkRequest);
+        headers: config.headers
+    });
+};
+
+export function getInitialCardsApi() {
+    return request(`${config.baseUrl}/cards`, {
+        method: 'GET',
+        headers: config.headers
+    });
   };
 
-export function getInitialCards() {
-    return fetch(`${config.baseUrl}/cards`, {
-        method: 'GET',
-        headers: config.headers,
-    }).then(checkRequest);
-  };
-
-export function editProfile(name, about) {
-    return fetch(`${config.baseUrl}/users/me`, {
+export function editProfileApi(name, about) {
+    return request(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
-            name: name,
-            about: about,
+            name,
+            about
       }),
-    }).then(checkRequest);
+    });
   };
 
-export function editAvatar(newAvatarUrl) {
-    return fetch(`${config.baseUrl}/users/me/avatar`, {
+export function editAvatarApi(avatar) {
+    return request(`${config.baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
-            avatar: newAvatarUrl
+            avatar,
         }),
-    }).then(checkRequest);
+    });
   };
 
-export function postCard(card) {
-    return fetch(`${config.baseUrl}/cards`, {
+export function postCardApi(name, link) {
+    return request(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({
-            name: card.name,
-            link: card.link,
+            name,
+            link
         }),
-    }).then(checkRequest);
+    });
   };
 
-export function deleteCard(cardId) {
-    return fetch(`${config.baseUrl}/cards/${cardId}`, {
+export function deleteCardApi(cardId) {
+    return request(`${config.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
         headers: config.headers,
-    }).then(checkRequest);
+    });
   };
  
-export function putLike(cardId) {
-    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+export function putLikeApi(cardId) {
+    return request(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: config.headers,
-    }).then(checkRequest);
+    });
   };
 
-export function deleteLike(cardId) {
-    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+export function deleteLikeApi(cardId) {
+    return request(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers: config.headers,
-    }).then(checkRequest);
+    });
   };

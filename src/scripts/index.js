@@ -5,8 +5,7 @@
 // вызовы других функций, подключённых из созданных модулей, 
 // которым нужно будет передавать объявленные здесь переменные и обработчики.
 import '../pages/index.css';
-import { initialCards } from './cards.js';
-import { getUserInfo, getInitialCards, editProfile, editAvatar, postCard } from './api.js';
+import { getUserInfoApi, getInitialCardsApi, editProfileApi, editAvatarApi, postCardApi } from './api.js';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openModalWindow, closeModalWindow } from './modal.js';
 import { enableValidation, clearValidation } from './validation.js';
@@ -59,16 +58,17 @@ function openImage(evt) {
     popupCaption.textContent = evt.target.alt;
   };
 
-Promise.all([getUserInfo(), getInitialCards()])
+Promise.all([getUserInfoApi(), getInitialCardsApi()])
   .then(([userInfo, initialCards]) => {
     userId = userInfo._id;
     profileTitle.textContent = userInfo.name;
     profileDescription.textContent = userInfo.about;
-    profileAvatar.computedStyleMap.backgroundImage = `url(${userInfo.avatar})`;
+    profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
 
     initialCards.forEach((card) => {
-        cardList.append(createCard(card, userId, removeCard, likeCard, openImage));
-  });
+      const newCard = createCard(card, userId, removeCard, likeCard, openImage);
+      cardList.append(newCard);
+    });
   })
   .catch((err) => {
     console.log(err);
@@ -77,7 +77,7 @@ Promise.all([getUserInfo(), getInitialCards()])
 addButton.addEventListener('click', (evt) => {
     openModalWindow(popupAddCard);
 
-    clearValidation(formAddNewPlace, validationConfig); 
+    // clearValidation(formAddNewPlace, validationConfig); 
 });
 
 editButton.addEventListener('click', (evt) => {
@@ -86,22 +86,23 @@ editButton.addEventListener('click', (evt) => {
     editProfileName.value = profileTitle.textContent;
     editProfileDescription.value = profileDescription.textContent;
     
-    clearValidation(formEditProfile, validationConfig); 
+    // clearValidation(formEditProfile, validationConfig); 
 });
 
 profileAvatar.addEventListener('click', (evt) => {
     openModalWindow(popupEditAvatar);
     
-    clearValidation(formEditAvatar, validationConfig); 
+    // clearValidation(formEditAvatar, validationConfig); 
 });
 
 
 function handleFormSubmit(evt) {
     evt.preventDefault();
-    editProfile(editProfileName.value, editProfileDescription.value)
+    saveButton.textContent = saveButton.getAttribute('data-loading');
+    editProfileApi(editProfileName.value, editProfileDescription.value)
     .then((res) => {
-      profileTitle.textContent = editProfileName.value;
-      profileDescription.textContent = editProfileDescription.value;
+      profileTitle.textContent = res.value;
+      profileDescription.textContent = res.value;
       closeModalWindow(popupEditProfile);
     })
     .catch((err) => {
@@ -112,8 +113,8 @@ function handleFormSubmit(evt) {
 function handleCreateCard(evt) {
     evt.preventDefault();
     saveButton.textContent = saveButton.getAttribute('data-loading');
-    const card = {name: cardName.value, link: cardLink.value};
-    postCard(card)
+    // const card = {name: cardName.value, link: cardLink.value};
+    postCardApi(cardName.value, cardLink.value)
       .then((card) => {
         const newCard = createCard(card, userId, removeCard, likeCard, openImage);
         cardList.prepend(newCard);
@@ -126,9 +127,9 @@ function handleCreateCard(evt) {
 };
 
 function handleEditAvatar(evt) {
-    evt.preventDefault();
     saveButton.textContent = saveButton.getAttribute('data-loading');
-    editAvatar(avatarLink.value)
+    evt.preventDefault();
+    editAvatarApi(editAvatarUrl.value)
       .then((res) => {
         profileAvatar.src = res.avatar;
         closeModalWindow(popupEditAvatar);
