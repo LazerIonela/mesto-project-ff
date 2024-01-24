@@ -5,11 +5,12 @@
 // вызовы других функций, подключённых из созданных модулей, 
 // которым нужно будет передавать объявленные здесь переменные и обработчики.
 import '../pages/index.css';
-import { getUserInfoApi, getInitialCardsApi, editProfileApi, editAvatarApi, postCardApi } from './api.js';
+import { getUserInfoApi, getInitialCardsApi, editProfileApi, editAvatarApi, postCardApi, deleteCardApi, putLikeApi, deleteLikeApi } from './api.js';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openModalWindow, closeModalWindow } from './modal.js';
 import { enableValidation, clearValidation } from './validation.js';
 
+let userId;
 
 const cardList = document.querySelector('.places__list');
 
@@ -26,7 +27,7 @@ const popupCaption = document.querySelector('.popup__caption');
 
 const editProfileName = document.querySelector('.popup__input_type_name');
 const editProfileDescription = document.querySelector('.popup__input_type_description');
-const editAvatarUrl = document.querySelector('.popup__input_type_url');
+const editAvatarUrl = popupEditAvatar.querySelector('.popup__input_type_url');
 
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
@@ -38,9 +39,6 @@ const formEditAvatar = document.forms['avatar'];
 
 const cardName = document.querySelector('.popup__input_type_card-name');
 const cardLink = document.querySelector('.popup__input_type_url');
-const avatarLink = formEditAvatar.elements.link;
-
-let userId;
 
 const validationConfig = {
     formSelector: '.popup__form',
@@ -66,8 +64,7 @@ Promise.all([getUserInfoApi(), getInitialCardsApi()])
     profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
 
     initialCards.forEach((card) => {
-      const newCard = createCard(card, userId, removeCard, likeCard, openImage);
-      cardList.append(newCard);
+      cardList.append(createCard(card, likeCard, removeCard, openImage, userId));
     });
   })
   .catch((err) => {
@@ -97,12 +94,12 @@ profileAvatar.addEventListener('click', (evt) => {
 
 
 function handleFormSubmit(evt) {
-    evt.preventDefault();
-    saveButton.textContent = saveButton.getAttribute('data-loading');
-    editProfileApi(editProfileName.value, editProfileDescription.value)
+  evt.preventDefault();
+  saveButton.textContent = saveButton.getAttribute('data-loading');
+  editProfileApi(editProfileName.value, editProfileDescription.value)
     .then((res) => {
-      profileTitle.textContent = res.value;
-      profileDescription.textContent = res.value;
+      profileTitle.textContent = res.name;
+      profileDescription.textContent = res.about;
       closeModalWindow(popupEditProfile);
     })
     .catch((err) => {
@@ -113,13 +110,11 @@ function handleFormSubmit(evt) {
 function handleCreateCard(evt) {
     evt.preventDefault();
     saveButton.textContent = saveButton.getAttribute('data-loading');
-    // const card = {name: cardName.value, link: cardLink.value};
     postCardApi(cardName.value, cardLink.value)
       .then((card) => {
-        const newCard = createCard(card, userId, removeCard, likeCard, openImage);
-        cardList.prepend(newCard);
+        cardList.prepend(createCard(card, likeCard, removeCard, openImage, userId));
         closeModalWindow(popupAddCard);
-        formAddNewPlace.reset();
+        // formAddNewPlace.reset();
       })
       .catch((err) => {
         console.log(err);
@@ -127,21 +122,22 @@ function handleCreateCard(evt) {
 };
 
 function handleEditAvatar(evt) {
-    saveButton.textContent = saveButton.getAttribute('data-loading');
-    evt.preventDefault();
-    editAvatarApi(editAvatarUrl.value)
-      .then((res) => {
-        profileAvatar.src = res.avatar;
-        closeModalWindow(popupEditAvatar);
+  evt.preventDefault();
+  saveButton.textContent = saveButton.getAttribute('data-loading');
+  editAvatarApi(editAvatarUrl.value)
+    .then((res) => {
+      profileAvatar.src = res.avatar;
+      closeModalWindow(popupEditAvatar);
         formEditAvatar.reset();
-      })
-      .catch((err) => {
+    })
+    .catch((err) => {
       console.log(err);
     });
 };
-  
+ 
 formEditProfile.addEventListener('submit', handleFormSubmit);
 formAddNewPlace.addEventListener('submit', handleCreateCard);
 formEditAvatar.addEventListener('submit', handleEditAvatar);
+// removeButton.addEventListener('click', removeCard);
 
 enableValidation(validationConfig);

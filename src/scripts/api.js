@@ -1,3 +1,5 @@
+// export const userId = '327061c49f75d8e4ba1e1f0a';
+
 const config = {
     baseUrl: 'https://nomoreparties.co/v1/wff-cohort-4',
     headers: {
@@ -6,15 +8,15 @@ const config = {
     },
   };
 
-  function request(url, options) {
-    return fetch(url, options)
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        }
-        return Promise.reject(`Ошибка: ${res.status}`)
-      })
-  }
+function request(url, options) {
+  return fetch(url, options)
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+    });
+};
 
 export function getUserInfoApi() {
     return request(`${config.baseUrl}/users/me`, {
