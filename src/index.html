@@ -19,15 +19,14 @@
   </header>
   <main class="content">
     <section class="profile page__section">
-      <div 
-        class="profile__image" 
-        style="background-image: url('<%=require('./images/avatar.jpg')%>')">
-        <span class="profile__image-background">
-          <svg class="profile__image-edit" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
-            <use href="<%=require('../src/images/avatar-pencil.svg')%>" fill="currentColor"></use>  
-          </svg>
-        </span>
-      </div>
+      <div class="profile__image"
+            style="background-image: url('<%=require('./images/avatar.jpg')%>')">
+            <span class="profile__image-background">
+              <svg class="profile__image-edit" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                <use href="<%=require('./images/avatar-pencil.svg')%>#edit-avatar" fill="currentColor"></use>
+              </svg> 
+            </span>
+        </div>
       <div class="profile__info">
         <h1 class="profile__title">Жак-Ив Кусто</h1>
         <button aria-label="Редактировать профиль" class="profile__edit-button" type="button"></button>

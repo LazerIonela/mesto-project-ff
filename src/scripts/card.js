@@ -27,14 +27,14 @@ export function createCard(card, likeCard, removeCard, openImage, userId) {
 
   if (card.owner._id === userId) {
     removeButton.addEventListener('click', () => {
-      removeCard(card._id);
+      removeCard(card._id, cardElement);
     });
 
   } else {
     removeButton.classList.add('card__delete-button-hide');
   };
 
-    likeButton.addEventListener('click', () => likeCard());
+    likeButton.addEventListener('click', () => likeCard(cardElement, card._id, likeButton, amountOfLikes));
     cardImage.addEventListener('click', openImage);
 
   return cardElement;
@@ -46,9 +46,8 @@ export function removeCard(cardId, cardElement) {
     .catch((err) => console.log(err));
 }; 
 
-export function likeCard(cardId, likeButton) {
-  const amountOfLikes = document.querySelector('.card__likes');
-  const isLiked = likeButton.classList.contains('card__like-button_is-active');
+export function likeCard(cardElement, cardId, likeButton, amountOfLikes) {
+  const isLiked = cardElement.querySelector('.card__like-button').classList.contains('card__like-button_is-active');
   const likeMethod = isLiked ? deleteLikeApi : putLikeApi;
   likeMethod(cardId)
     .then((card) => {

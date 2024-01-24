@@ -5,7 +5,7 @@
 // вызовы других функций, подключённых из созданных модулей, 
 // которым нужно будет передавать объявленные здесь переменные и обработчики.
 import '../pages/index.css';
-import { getUserInfoApi, getInitialCardsApi, editProfileApi, editAvatarApi, postCardApi, deleteCardApi, putLikeApi, deleteLikeApi } from './api.js';
+import { getUserInfoApi, getInitialCardsApi, editProfileApi, editAvatarApi, postCardApi } from './api.js';
 import { createCard, removeCard, likeCard } from './card.js';
 import { openModalWindow, closeModalWindow } from './modal.js';
 import { enableValidation, clearValidation } from './validation.js';
@@ -114,7 +114,7 @@ function handleCreateCard(evt) {
       .then((card) => {
         cardList.prepend(createCard(card, likeCard, removeCard, openImage, userId));
         closeModalWindow(popupAddCard);
-        // formAddNewPlace.reset();
+        formAddNewPlace.reset();
       })
       .catch((err) => {
         console.log(err);
@@ -138,6 +138,5 @@ function handleEditAvatar(evt) {
 formEditProfile.addEventListener('submit', handleFormSubmit);
 formAddNewPlace.addEventListener('submit', handleCreateCard);
 formEditAvatar.addEventListener('submit', handleEditAvatar);
-// removeButton.addEventListener('click', removeCard);
 
 enableValidation(validationConfig);
